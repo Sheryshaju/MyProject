@@ -1,5 +1,16 @@
 <odoo>
   <data>
+    <record id="view_order_form_inherit" model="ir.ui.view">
+        	<field name="name">Sale Order Custom</field>
+        	<field name="model">sale.order</field>
+        	<field name="inherit_id" ref="sale.view_order_form"/>
+        	<field name="arch" type="xml">
+            	<field name="sale_order_template_id" position="after">
+                		<field name="ship"/>
+            	</field>
+        	</field>
+</record>
+    
      <record model="ir.ui.view" id="sales_ship_tree">
             <field name="name">sales.ship.tree</field>
             <field name="model">sales.ship</field>
