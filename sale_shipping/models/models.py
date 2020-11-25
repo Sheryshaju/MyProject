@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields
 
+class SaleOrder(models.Model):
+	_inherit = 'sale.order'
+	ship = fields.Many2one('sales.ship',string="ship",required=True)
+
+   
 
 class SaleShip(models.Model):
 
