@@ -1,121 +1,95 @@
 <odoo>
   <data>
-    <record id="view_order_form_inherit" model="ir.ui.view">
-        	<field name="name">Sale Order Custom</field>
-        	<field name="model">sale.order</field>
-        	<field name="inherit_id" ref="sale.view_order_form"/>
-        	<field name="arch" type="xml">
-            	<field name="sale_order_template_id" position="after">
-                		<field name="ship"/>
-            	</field>
-        	</field>
-</record>
-    
-     <record model="ir.ui.view" id="sales_ship_tree">
-            <field name="name">sales.ship.tree</field>
-            <field name="model">sales.ship</field>
-            <field name="arch" type="xml">
-                <tree string="Shipment Sales">
-                    <field name="name"/>
-                    <field name="IMO"/>
-                    <field name="hull_number"/>
-                    <field name="engine_number"/>
-                    <field name="vessel_name"/>
-                    <field name="build_year"/>
-                    <field name="ship_yard"/>
-                    <field name="ship_owner"/>
-                    <field name="ship_management"/>
-                    <field name="engine_builder"/>
-                </tree>
-            </field>
-        </record>
+
+      <record id="view_order_form_inherit" model="ir.ui.view">
+          <field name="name">Sale Order Custom</field>
+          <field name="model">sale.order</field>
+          <field name="inherit_id" ref="sale.view_order_form"/>
+          <field name="arch" type="xml">
+              <field name="sale_order_template_id" position="after">
+                  <field name="ship"/>
+                  <button name="update_to_order" string="Update to Order Line" type="object"/>
+              </field>
+
+          </field>
+      </record>
+      <record model="ir.ui.view" id="sale_order_view_inherit">
+          <field name="name">sale.order.view.inherit1</field>
+          <field name="model">sale.order</field>
+          <field name="inherit_id" ref="sale.view_order_form"/>
+          <field name="arch" type="xml">
+              <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='name']"
+                     position="after">
+                  <field name="ship" context="{'ship': ship}"/>
+              </xpath>
+          </field>
+      </record>
+
+      <record id="view_sales_tree" model="ir.ui.view">
+          <field name="name">sale.order.tree</field>
+          <field name="model">sale.order</field>
+          <field name="inherit_id" ref="sale.view_order_tree"/>
+          <field name="arch" type="xml">
+              <field name="user_id" position="after">
+                  <field name="ship"/>
+              </field>
+          </field>
+      </record>
+
+      <record model="ir.ui.view" id="sales_ship_tree">
+          <field name="name">sales.ship.tree</field>
+          <field name="model">sales.ship</field>
+          <field name="arch" type="xml">
+              <tree string="Shipment Sales">
+                  <!----><!--<field name="name"/>--><!---->
+                  <field name="IMO"/>
+                  <field name="hull_number"/>
+                  <field name="engine_number"/>
+                  <field name="vessel_name"/>
+                  <field name="build_year"/>
+                  <field name="ship_yard"/>
+                  <field name="ship_owner"/>
+                  <field name="ship_management"/>
+                  <field name="engine_builder"/>
+              </tree>
+          </field>
+      </record>
+
       <record model="ir.ui.view" id="sales_ship_form">
-            <field name="name">sales.ship.form</field>
-            <field name="model">sales.ship</field>
-            <field name="arch" type="xml">
-                <form string="Shipment Sales">
-                    <group>
-                        <field name="name"/>
-                        <field name="IMO"/>
-                        <field name="hull_number"/>
-                        <field name="engine_number"/>
-                        <field name="vessel_name"/>
-                        <field name="build_year"/>
-                        <field name="ship_yard"/>
-                        <field name="ship_owner"/>
-                        <field name="ship_management"/>
-                        <field name="engine_builder"/>
-                    </group>
-                </form>
-            </field>
-        </record>
+          <field name="name">sales.ship.form</field>
+          <field name="model">sales.ship</field>
+          <field name="arch" type="xml">
+              <form string="Shipment Sales">
+                  <sheet>
+                      <group col="4" colspan="4" name="shipping details">
+                          <field name="IMO"/>
+                          <field name="hull_number"/>
+                          <field name="engine_number"/>
+                          <field name="vessel_name"/>
+                          <field name="build_year"/>
+                      </group>
+                      <group col="4" colspan="4" name="shipping details">
+                          <field name="ship_yard"/>
+                          <field name="ship_owner"/>
+                          <field name="ship_management"/>
+                          <field name="engine_builder"/>
+                      </group>
+                  </sheet>
+              </form>
+          </field>
+      </record>
 
-            <record model="ir.actions.act_window" id="ship_action">
-            <field name="name">Shipment Sales</field>
-                <field name="res_model">sales.ship</field>
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Create new shipping details
-                </p>
-            </field>
-            </record>
+      <record model="ir.actions.act_window" id="ship_action">
+          <field name="name">Shipment Sales</field>
+          <field name="res_model">sales.ship</field>
+          <field name="view_mode">tree,form</field>
+          <field name="help" type="html">
+              <p class="oe_view_nocontent_create">Create new shipping details
+              </p>
+          </field>
+      </record>
 
-     <menuitem id="shipping_root" name="shipsale" parent="sale.menu_sales_config" sequence="6" action="ship_action" />
-    <!-- explicit list view definition -->
-<!--
-    <record model="ir.ui.view" id="sale_shipping.list">
-      <field name="name">sale_shipping list</field>
-      <field name="model">sale_shipping.sale_shipping</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
-        </tree>
-      </field>
-    </record>
--->
-
-    <!-- actions opening views on models -->
-<!--
-    <record model="ir.actions.act_window" id="sale_shipping.action_window">
-      <field name="name">sale_shipping window</field>
-      <field name="res_model">sale_shipping.sale_shipping</field>
-      <field name="view_mode">tree,form</field>
-    </record>
--->
-
-    <!-- server action to the one above -->
-<!--
-    <record model="ir.actions.server" id="sale_shipping.action_server">
-      <field name="name">sale_shipping server</field>
-      <field name="model_id" ref="model_sale_shipping_sale_shipping"/>
-      <field name="state">code</field>
-      <field name="code">
-        action = {
-          "type": "ir.actions.act_window",
-          "view_mode": "tree,form",
-          "res_model": model._name,
-        }
-      </field>
-    </record>
--->
-
-    <!-- Top menu item -->
-<!--
-    <menuitem name="sale_shipping" id="sale_shipping.menu_root"/>
--->
-    <!-- menu categories -->
-<!--
-    <menuitem name="Menu 1" id="sale_shipping.menu_1" parent="sale_shipping.menu_root"/>
-    <menuitem name="Menu 2" id="sale_shipping.menu_2" parent="sale_shipping.menu_root"/>
--->
-    <!-- actions -->
-<!--
-    <menuitem name="List" id="sale_shipping.menu_1_list" parent="sale_shipping.menu_1"
-              action="sale_shipping.action_window"/>
-    <menuitem name="Server to list" id="sale_shipping" parent="sale_shipping.menu_2"
-              action="sale_shipping.action_server"/>
--->
+      <menuitem id="shipping_root" name="shipsale" parent="sale.menu_sales_config"
+                sequence="6" action="ship_action"/>
   </data>
 </odoo>
